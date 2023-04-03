@@ -1,12 +1,13 @@
 {
-  "name": "n",
+  "name": "mern-social-media-backend1",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
-    "start": "node build/index"
+    "start": "node build/index",
+    "build": "tsc"
   },
   "author": "Kingsley Ihemelandu",
   "license": "MIT",
