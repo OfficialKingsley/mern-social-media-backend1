@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import { postRoutes } from "./api/v1/routes";
+import { authRoutes, postRoutes, userRoutes } from "./api/v1/routes";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -20,7 +20,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(morgan("dev"));
 
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Hello wow</h1>");
@@ -38,4 +40,5 @@ mongoose
   })
   .catch((err) => {
     console.log(MONGO_URI, PORT);
+    console.log("The error is", err);
   });
