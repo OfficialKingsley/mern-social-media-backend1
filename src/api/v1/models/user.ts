@@ -11,6 +11,7 @@ export const userSchema = new Schema(
       type: String,
       default: "",
     },
+    fullName: { type: String, default: "" },
     username: {
       type: String,
       required: [1, "Username is required for a user"],
@@ -57,6 +58,10 @@ export const userSchema = new Schema(
     token: {
       type: String,
       default: "",
+    },
+    friends: {
+      type: [Schema.Types.ObjectId],
+      default: [],
     },
   },
   {
