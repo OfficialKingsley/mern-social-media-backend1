@@ -21,11 +21,22 @@ export const userSchema = new Schema(
       required: [1, "Email is required for a user"],
       unique: [1, "This email is already in use"],
     },
-    profileImage: {
+    profileImageUrl: {
       type: String,
+      default:
+        "https://res.cloudinary.com/dqltnm2ba/image/upload/v1680655716/MernSocialMediaApp/defaults/profile-image_gv6h3q.webp",
     },
-    coverImage: {
+    profileImageId: {
       type: String,
+      default: "",
+    },
+    coverImageUrl: {
+      type: String,
+      default: "",
+    },
+    coverImageId: {
+      type: String,
+      default: "",
     },
     password: {
       type: String,

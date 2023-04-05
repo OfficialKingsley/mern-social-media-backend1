@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { changeProfileImage } from "../controllers/users";
+import { uploadImage } from "../middlewares/multer";
 import User from "../models/user";
 
 const router = Router();
@@ -12,5 +14,10 @@ router.get("/", async (req, res) => {
     console.log(error);
   }
 });
+router.put(
+  "/:id/profile-image",
+  uploadImage.single("profileImage"),
+  changeProfileImage
+);
 
 export default router;
