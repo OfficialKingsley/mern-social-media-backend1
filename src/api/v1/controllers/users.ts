@@ -11,7 +11,6 @@ export const changeProfileImage: RequestHandler = async (
     const user = await User.findById(id).select("-password -__v");
     if (user) {
       if (req.file) {
-        console.log(req.file.mimetype);
         const cloudinaryUpload = await cloudinary.uploader.upload(
           req.file.path,
           {

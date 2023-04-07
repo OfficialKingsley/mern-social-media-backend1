@@ -1,6 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Model, Document } from "mongoose";
+import { IPost } from "../interfaces/IPost";
 
-export const postSchema = new Schema({
+export const postSchema: Schema<IPost> = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -11,8 +12,11 @@ export const postSchema = new Schema({
   imageUrl: {
     type: String,
   },
+  imageId: {
+    type: String,
+  },
 });
 
-const Post = model("Post", postSchema);
+const Post: Model<IPost> = model("Post", postSchema);
 
 export default Post;
