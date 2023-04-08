@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { use } from "passport";
+
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -87,5 +87,31 @@ export const loginUser: RequestHandler = async (
         statusCode: res.statusCode,
       });
     }
+  }
+};
+
+export const verifyToken: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { token } = req.body;
+    const decodedUser = jwt.verify(token, JWT_SECRET);
+    if (!decodedUser) {
+      throw new Error("Error occured with token verification");
+    }
+    const user = await User.findOne({ token }).select(
+      "-password -__v -profileImageId -coverImageId"
+    );
+    if (!user) {
+      throw new Error("No user with that token");
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      // if the error thrown is because the JWT is unauthorized, return a 401 error
+      return res.status(401).end();
+    }
+    return res.status(400).end();
   }
 };
