@@ -60,7 +60,12 @@ export const userSchema = new Schema(
       default: "",
     },
     friends: {
-      type: [Schema.Types.ObjectId],
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
       default: [],
     },
   },

@@ -1,22 +1,11 @@
-import { Request, Response, Router } from "express";
-import Post from "../models/post";
+import { Router } from "express";
+
 import { uploadImage } from "../middlewares/multer";
-import { createPost } from "../controllers/posts";
+import { createPost, getPosts } from "../controllers/posts";
 
 const router: Router = Router();
 
-router.get("/", async (req: Request, res: Response) => {
-  try {
-    const posts = Post.find({})
-      .populate("User", "-password -__v -profileImageId -coverImageId")
-      .select("-imageId");
-    res.status(200).json(posts);
-  } catch (error) {
-    res.status(500).json("An error occured");
-    console.log(error);
-  }
-});
-
+router.get("/", getPosts);
 router.post("/", uploadImage.single("postImage"), createPost);
 
 export default router;

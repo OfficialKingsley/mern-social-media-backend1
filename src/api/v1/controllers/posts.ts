@@ -2,6 +2,7 @@ import { Request, RequestHandler, Response } from "express";
 import { IPost } from "../interfaces/IPost";
 import Post from "../models/post";
 import cloudinary from "../utils/cloudinary";
+import { errorHandler } from "../utils/errorHandler";
 
 export const createPost: RequestHandler = async (
   req: Request,
@@ -46,15 +47,20 @@ export const createPost: RequestHandler = async (
       return res.status(201).json(post);
     }
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.name === "Error") {
-        error.name = "Post Error";
-      }
-      res.status(400).json({
-        name: error.name,
-        message: error.message,
-        statusCode: res.statusCode,
-      });
-    }
+    errorHandler(error, res);
+  }
+};
+
+export const getPosts = async (req: Request, res: Response) => {
+  try {
+    const posts = await Post.find({})
+      .populate({
+        path: "user",
+        select: "-password -__v -profileImageId -coverImageId",
+      })
+      .select("-imageId");
+    res.status(200).json(posts);
+  } catch (error) {
+    errorHandler(error, res);
   }
 };

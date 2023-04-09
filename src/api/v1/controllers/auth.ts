@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { errorHandler } from "../utils/errorHandler";
 
 dotenv.config();
 
@@ -38,16 +39,7 @@ export const registerUser: RequestHandler = async (
     const newUser = await user.save();
     res.status(200).json(newUser);
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.name === "Error") {
-        error.name = "ValidationError";
-      }
-      res.status(400).json({
-        name: error.name,
-        message: error.message,
-        statusCode: res.statusCode,
-      });
-    }
+    errorHandler(error, res, undefined, "ValidationError");
   }
 };
 
@@ -77,16 +69,7 @@ export const loginUser: RequestHandler = async (
 
     res.status(200).json(savedUser);
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.name === "Error") {
-        error.name = "ValidationError";
-      }
-      res.status(400).json({
-        name: error.name,
-        message: error.message,
-        statusCode: res.statusCode,
-      });
-    }
+    errorHandler(error, res, undefined, "Validation Error");
   }
 };
 
@@ -108,10 +91,6 @@ export const verifyToken: RequestHandler = async (
     }
     return res.status(200).json(user);
   } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      // if the error thrown is because the JWT is unauthorized, return a 401 error
-      return res.status(401).end();
-    }
-    return res.status(400).end();
+    errorHandler(error, res);
   }
 };
