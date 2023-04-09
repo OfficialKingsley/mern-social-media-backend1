@@ -12,10 +12,13 @@ export const postSchema: Schema<IPost> = new Schema(
     },
     imageUrl: {
       type: String,
+      default: "",
     },
     imageId: {
       type: String,
+      default: "",
     },
+    likes: { type: [Schema.Types.ObjectId], default: [] },
   },
   {
     timestamps: true,

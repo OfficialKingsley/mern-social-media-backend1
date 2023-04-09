@@ -60,6 +60,7 @@ export const addFriend: RequestHandler = async (req, res) => {
       if (friend) {
         if (!user.friends.includes(friend._id)) {
           user?.friends.push(friend?._id!);
+          await user.save();
         } else throw new Error("This user is already exists your friend");
       } else throw new Error("No friend with that Id");
     } else throw new Error("No user with that Id");

@@ -4,4 +4,5 @@ export interface IPost extends Document {
   text?: string;
   imageUrl?: string;
   imageId?: string;
+  likes: Schema.Types.ObjectId[];
 }

@@ -14,10 +14,8 @@ export const uploadImage = multer({
       ext !== ".webp"
     ) {
       cb(null, false);
-      console.log("Is not working", ext);
       return;
     }
-    console.log("Is working", ext);
     cb(null, true);
   },
   limits: { fileSize: 3000000 },
