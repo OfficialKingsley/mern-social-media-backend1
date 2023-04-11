@@ -3,7 +3,7 @@ import User from "../models/user";
 import cloudinary from "../utils/cloudinary";
 import { errorHandler } from "../utils/errorHandler";
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers: RequestHandler = async (req: Request, res: Response) => {
   try {
     const users = await User.find()
       .populate({
@@ -17,6 +17,22 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+export const getUser: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findById(id)
+      .select("-profileImageId -coverImageId -password -__v")
+      .populate({
+        path: "friends",
+        select: "-profileImageId -coverImageId -password -__v",
+      });
+    if (user) {
+      return res.status(200).json(user);
+    } else throw new Error("User not found");
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
 export const changeProfileImage: RequestHandler = async (
   req: Request,
   res: Response

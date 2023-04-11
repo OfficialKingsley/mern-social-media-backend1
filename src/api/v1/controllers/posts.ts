@@ -66,6 +66,21 @@ export const getPosts = async (req: Request, res: Response) => {
   }
 };
 
+export const getSpecificPosts = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.query;
+    const posts = await Post.find({ user: userId })
+      .populate({
+        path: "user",
+        select: "-password -__v -profileImageId -coverImageId",
+      })
+      .select("-imageId");
+    res.status(200).json(posts);
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
+
 export const likePost: RequestHandler = async (req, res) => {
   try {
     const id = req.params.id;
