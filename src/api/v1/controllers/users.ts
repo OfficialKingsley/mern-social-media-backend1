@@ -33,6 +33,7 @@ export const getUser: RequestHandler = async (req, res) => {
     errorHandler(error, res);
   }
 };
+
 export const changeProfileImage: RequestHandler = async (
   req: Request,
   res: Response
@@ -57,6 +58,39 @@ export const changeProfileImage: RequestHandler = async (
         );
         user.profileImageUrl = cloudinaryUpload.secure_url;
         user.profileImageId = cloudinaryUpload.public_id;
+        await user.save();
+        res.json(user);
+      }
+    }
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
+
+export const changeCoverImage: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id)
+      .populate({
+        path: "friends",
+        select: "-password -__v -coverImageId -profileImageId",
+      })
+      .select("-password -__v");
+    if (user) {
+      if (req.file) {
+        const cloudinaryUpload = await cloudinary.uploader.upload(
+          req.file.path,
+          {
+            folder: `MernSocialMediaApp/users/${user._id}/profile-images`,
+            resource_type: "image",
+            overwrite: false,
+          }
+        );
+        user.coverImageUrl = cloudinaryUpload.secure_url;
+        user.coverImageId = cloudinaryUpload.public_id;
         await user.save();
         res.json(user);
       }
